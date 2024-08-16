@@ -1,8 +1,8 @@
 package com.medilabo.patientService.model;
 
-import jakarta.persistence.Id;
 import lombok.Data;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.MongoId;
 
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
@@ -12,7 +12,7 @@ import javax.validation.constraints.NotNull;
 @Data
 public class Patient {
 
-    @Id
+    @MongoId
     private String id;
 
     @NotNull

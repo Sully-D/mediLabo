@@ -39,7 +39,7 @@ public class PatientService {
         try {
             patientValidationService.validatePatient(patient);
 
-            Optional<Patient> oldPatientEntry = patientRepository.findByNameAndDateOfBirth(
+            Optional<Patient> oldPatientEntry = patientRepository.findByFirstNameAndLastNameAndDateOfBirth(
                     patient.getFirstName(), patient.getLastName(), patient.getDateOfBirth()
             );
 
@@ -73,7 +73,7 @@ public class PatientService {
         }
     }
 
-    public void delete (Long id) {
+    public void delete (String id) {
         patientRepository.deleteById(id);
     }
 

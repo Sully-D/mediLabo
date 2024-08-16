@@ -28,7 +28,7 @@ public class PatientController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Patient> updatePatient(@PathVariable Long id, @RequestBody Patient patient) {
+    public ResponseEntity<Patient> updatePatient(@PathVariable String id, @RequestBody Patient patient) {
         try {
             patient.setId(id);
             Patient updatedPatient = patientService.update(patient);
@@ -44,6 +44,7 @@ public class PatientController {
     @GetMapping
     public ResponseEntity<List<Patient>> getAllPatients() {
         List<Patient> patients = patientService.getAll();
+        System.out.println("OK");
         return ResponseEntity.ok(patients);
     }
 
@@ -59,7 +60,7 @@ public class PatientController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletePatient(@PathVariable Long id) {
+    public ResponseEntity<Void> deletePatient(@PathVariable String id) {
         try {
             patientService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
