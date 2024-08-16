@@ -44,7 +44,6 @@ public class PatientController {
     @GetMapping
     public ResponseEntity<List<Patient>> getAllPatients() {
         List<Patient> patients = patientService.getAll();
-        System.out.println("OK");
         return ResponseEntity.ok(patients);
     }
 
