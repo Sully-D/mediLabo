@@ -12,69 +12,16 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
-public class PatientService {
+public interface PatientService {
 
-    @Autowired
-    private PatientRepository patientRepository;
+    Patient add (Patient patient);
 
-    @Autowired
-    private PatientValidationService patientValidationService;
+    Patient update (Patient patient);
 
-    @Transactional
-    public Patient add (Patient patient) {
+    List<Patient> getAll ();
 
-        try {
-            patientValidationService.validatePatient(patient);
+    Optional<Patient> findOneByFirstNameAndLastName(String firstName, String lastName);
 
-            return patientRepository.save(patient);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Validation failed : " + e.getMessage());
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Database operation failed : " + e.getMessage());
-        }
-    }
-
-    @Transactional
-    public Patient update (Patient patient) {
-        try {
-            patientValidationService.validatePatient(patient);
-
-            Optional<Patient> oldPatientEntry = patientRepository.findByFirstNameAndLastNameAndDateOfBirth(
-                    patient.getFirstName(), patient.getLastName(), patient.getDateOfBirth()
-            );
-
-            if (oldPatientEntry.isEmpty()) {
-                System.out.println("Patient not found !");
-                return null;
-            }
-
-            patient.setId(oldPatientEntry.get().getId());
-
-            return patientRepository.save(patient);
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Validation failed : " + e.getMessage());
-        } catch (DataAccessException e) {
-            throw new RuntimeException("Database operation failed : " + e.getMessage());
-        }
-    }
-
-    public List<Patient> getAll () {
-        return patientRepository.findAll();
-    }
-
-    public Optional<Patient> findOneByFirstNameAndLastName(String firstName, String lastName) {
-
-        try {
-            patientValidationService.isNameEmpty(firstName, lastName);
-
-            return patientRepository.findByFirstNameAndLastName(firstName, lastName).stream().findFirst();
-        } catch (IllegalArgumentException e) {
-            throw new RuntimeException("Validation failed : " + e.getMessage());
-        }
-    }
-
-    public void delete (String id) {
-        patientRepository.deleteById(id);
-    }
+    void delete (String id);
 
 }
