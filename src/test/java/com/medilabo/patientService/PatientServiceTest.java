@@ -4,6 +4,7 @@ import com.medilabo.patientService.Util.PatientValidationService;
 import com.medilabo.patientService.model.Patient;
 import com.medilabo.patientService.repository.PatientRepository;
 import com.medilabo.patientService.service.PatientService;
+import com.medilabo.patientService.service.impl.PatientServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,6 +18,9 @@ import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
@@ -29,7 +33,7 @@ class PatientServiceTest {
     private PatientValidationService patientValidationService;
 
     @InjectMocks
-    private PatientService patientService;
+    private PatientServiceImpl patientService;
 
     private Patient patient;
 
@@ -59,7 +63,7 @@ class PatientServiceTest {
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> patientService.add(patient));
 
-        assertEquals("Validation failed : Invalid patient data", exception.getMessage());
+        assertEquals("Validation failed: Invalid patient data", exception.getMessage());
         verify(patientRepository, never()).save(any(Patient.class));
     }
 
@@ -69,7 +73,7 @@ class PatientServiceTest {
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> patientService.add(patient));
 
-        assertEquals("Database operation failed : DB error", exception.getMessage());
+        assertEquals("Database operation failed: DB error", exception.getMessage());
         verify(patientValidationService, times(1)).validatePatient(patient);
         verify(patientRepository, times(1)).save(any(Patient.class));
     }
@@ -127,7 +131,7 @@ class PatientServiceTest {
 
         RuntimeException exception = assertThrows(RuntimeException.class, () -> patientService.findOneByFirstNameAndLastName("", ""));
 
-        assertEquals("Validation failed : Names cannot be empty", exception.getMessage());
+        assertEquals("Validation failed: Names cannot be empty", exception.getMessage());
         verify(patientRepository, never()).findByFirstNameAndLastName(anyString(), anyString());
     }
 
